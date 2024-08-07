@@ -3,6 +3,9 @@ import admin from 'firebase-admin';
 import axios from 'axios';
 import * as logger from 'firebase-functions/logger';
 
+import { fromJson as profileFromJson } from './model/profile';
+import { fromJson as bikeInfoFromJson } from './model/bike-info';
+
 admin.initializeApp();
 const firestore = admin.firestore();
 
@@ -10,10 +13,7 @@ const COWBOY_API_BASE_URL = 'https://app-api.cowboy.bike';
 const SIGN_IN_URL = COWBOY_API_BASE_URL + '/auth/sign_in';
 const USERS_ME_URL = COWBOY_API_BASE_URL + '/users/me';
 
-const getAuthContext = async (
-  cowboyEmail: string,
-  cowboyPassword: string
-): Promise<AuthContext> => {
+const getAuthContext = async (cowboyEmail: string, cowboyPassword: string): Promise<AuthContext> => {
   logger.info('cowboy-email=' + cowboyEmail);
   logger.info('cowboy-password=' + cowboyPassword);
   const response = await axios.post(SIGN_IN_URL, {
@@ -29,10 +29,7 @@ const getAuthContext = async (
   };
 };
 
-const getRequestHeaders = async (
-  cowboyEmail: string,
-  cowboyPassword: string
-): Promise<Record<string, string>> => {
+const getRequestHeaders = async (cowboyEmail: string, cowboyPassword: string): Promise<Record<string, string>> => {
   const authContext = await getAuthContext(cowboyEmail, cowboyPassword);
   return {
     'Access-Token': authContext.accessToken,
@@ -56,7 +53,12 @@ export const fetchData = onSchedule(
     });
 
     const profileData = profileResponse.data;
-    await firestore.collection('profileReadings').add(profileData);
+
+    const profile = profileFromJson(profileData);
+    const bikeInfo = bikeInfoFromJson(profileData.bike);
+
+    firestore.collection('profile').doc(profile.uid).set(profile);
+    firestore.collection('bikeInfo').doc(bikeInfo.id.toString()).set(bikeInfo);
   }
 );
 

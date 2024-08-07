@@ -1,0 +1,22 @@
+<div class="card" *ngIf="bikeInfo$ | async as bikeInfo">
+  <div class="card-header">
+    <p class="card-caption">Battery</p>
+    <h4 class="card-title">You have {{ getBatteryLevel(bikeInfo) }}% left</h4>
+  </div>
+  <div class="card-body">
+    <p class="caption">
+      You typically do around {{ getRemainingRange(bikeInfo) }} km with that remaining battery level.
+    </p>
+  </div>
+
+  <div class="battery-image-container">
+    <img src="assets/cowboy_battery.png" alt="Battery image" class="battery-image" />
+  </div>
+
+  <div class="card-actions">
+    <div class="card-action">
+      <a href="#" class="card-action-text"> More information </a>
+      <mat-icon class="card-action-icon"> arrow_forward_ios </mat-icon>
+    </div>
+  </div>
+</div>

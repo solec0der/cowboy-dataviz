@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-header">
+    <p class="card-caption">Records</p>
+    <h4 class="card-title">Top Speeds this week</h4>
+  </div>
+  <div class="card-body">
+    <p class="caption">You hit a whopping 42 km/h on Wednesday.</p>
+
+    <div class="weekday-speed-records" id="records">
+      <div class="weekday-container" *ngFor="let weekdayTopSpeed of weekdayTopSpeeds; let i = index;">
+        <div class="speed-indication-bar" [style.height.px]="heights[i]" [class.top-record]="weekdayTopSpeed.isWeeklyRecord"></div>
+        <div class="weekday">{{ weekdayTopSpeed.weekday }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <div class="card-action">
+      <a href="#" class="card-action-text"> More information </a>
+      <mat-icon class="card-action-icon"> arrow_forward_ios </mat-icon>
+    </div>
+  </div>
+</div>

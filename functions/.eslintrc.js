@@ -28,5 +28,6 @@ module.exports = {
     'object-curly-spacing': 'off',
     'quote-props': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
+    'max-len': ['error', { 'code': 120 }],
   },
 };

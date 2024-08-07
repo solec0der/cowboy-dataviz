@@ -1,0 +1,105 @@
+<div class="bike-detail-container" *ngIf="(bikeInfo$ | async) as bikeInfo">
+  <div class="card-header">
+    <p class="card-caption">CLASSIC</p>
+    <h4 class="card-title">Dust Slinger</h4>
+  </div>
+
+  <div class="card-body">
+    <div class="bike-image-container">
+      <img
+        src="https://cowboy.com/cdn/shop/t/33/assets/classic-black_2496x.png?v=181930296804839241911710792245"
+        alt="Bike image"
+        class="bike-image"
+      />
+    </div>
+
+    <div class="list-container">
+      <p class="title">ESSENTIALS</p>
+
+      <div class="list">
+        <ng-container *ngFor="let essential of essentials; let last = last;">
+          <div class="list-item">
+            <span class="essential-title">{{ essential.title }}</span>
+
+            <span class="list-item-value" *ngIf="essential.dataType === 'string'">{{ essential.value }}</span>
+            <span class="list-item-value" *ngIf="essential.dataType === 'boolean'">
+              <mat-icon style="" [class]="'list-item-icon-' + essential.value">
+                {{ essential.value ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </span>
+          </div>
+          <div class="separator" *ngIf="!last"></div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="list-container">
+      <p class="title">YOUR BIKE</p>
+
+      <div class="list">
+        <ng-container *ngFor="let stat of stats; let last = last;">
+          <div class="list-item">
+            <span class="essential-title">{{ stat.title }}</span>
+
+            <span class="list-item-value" *ngIf="stat.dataType === 'date'">{{ stat.value | date:'dd.MM.yyyy' }}</span>
+            <span class="list-item-value" *ngIf="stat.dataType === 'string'">{{ stat.value }}</span>
+            <span class="list-item-value" *ngIf="stat.dataType === 'boolean'">
+              <mat-icon style="" [class]="'list-item-icon-' + stat.value">
+                {{ stat.value ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </span>
+          </div>
+          <div class="separator" *ngIf="!last"></div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="list-container">
+      <p class="title">POSITION</p>
+
+      <div class="list">
+        <ng-container *ngFor="let position of positionItems; let last = last;">
+          <div class="list-item">
+            <span class="essential-title">{{ position.title }}</span>
+
+            <span class="list-item-value" *ngIf="position.dataType === 'date'">{{ position.value | date:'dd.MM.yyyy' }}</span>
+            <span class="list-item-value" *ngIf="position.dataType === 'string'">{{ position.value }}</span>
+            <span class="list-item-value" *ngIf="position.dataType === 'boolean'">
+              <mat-icon style="" [class]="'list-item-icon-' + position.value">
+                {{ position.value ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </span>
+          </div>
+          <div class="separator" *ngIf="!last"></div>
+        </ng-container>
+      </div>
+    </div>
+
+    <p class="caption small" style="padding-left: 10px;">Last updated: {{ ((profile$ | async)?.updatedAt) | date:'dd.MM HH:mm:ss' }}</p>
+  </div>
+
+
+  <!--  <div class="card" style="background-color: #1A1C21" *ngIf="bikeInfo$ | async as bikeInfo">-->
+  <!--    <div class="card-header">-->
+  <!--      <p class="card-caption">Your Bike</p>-->
+  <!--      <h4 class="card-title">{{ bikeInfo.nickname }}</h4>-->
+  <!--    </div>-->
+  <!--    <div class="card-body">-->
+  <!--      <p class="caption">-->
+  <!--        This contains a list of all-->
+  <!--      </p>-->
+  <!--    </div>-->
+
+  <!--    <div class="battery-image-container">-->
+  <!--      <img src="assets/cowboy_battery.png" alt="Battery image" class="battery-image" />-->
+  <!--    </div>-->
+
+  <!--    <div class="card-actions">-->
+  <!--      <div class="card-action">-->
+  <!--        <a href="#" class="card-action-text"> More information </a>-->
+  <!--        <mat-icon class="card-action-icon"> arrow_forward_ios </mat-icon>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+</div>

@@ -1,0 +1,14 @@
+
+
+.bike-image-container {
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+}

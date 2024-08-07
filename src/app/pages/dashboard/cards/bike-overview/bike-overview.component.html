@@ -1,0 +1,27 @@
+<div class="card" *ngIf="(bikeInfo$ | async) as bikeInfo">
+  <div class="card-header">
+    <p class="card-caption">Your Bike</p>
+    <h4 class="card-title">{{ bikeInfo.nickname }}</h4>
+  </div>
+  <div class="card-body">
+    <p class="caption">You already rode {{ floor(bikeInfo.totalDistance) }} km on your Cowboy. That's phenomonal.</p>
+
+    <div class="bike-image-container">
+      <img
+        src="https://cowboy.com/cdn/shop/t/33/assets/classic-black_2496x.png?v=181930296804839241911710792245"
+        alt="Bike image"
+        class="bike-image"
+      />
+    </div>
+  </div>
+  <div class="card-actions">
+    <div class="card-action">
+      <a (click)="openBikeDetail()" class="card-action-text">
+        More information
+      </a>
+      <mat-icon class="card-action-icon">
+        arrow_forward_ios
+      </mat-icon>
+    </div>
+  </div>
+</div>

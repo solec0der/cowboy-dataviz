@@ -1,0 +1,24 @@
+.weekday-speed-records {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  .weekday-container {
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 5px;
+    .speed-indication-bar {
+      background-color: #191c21;
+      width: 7px;
+      height: 40px;
+      border-radius: 10px;
+    }
+    .top-record {
+      background-color: #317FC7;
+    }
+  }
+}
