@@ -20,12 +20,8 @@
     }
   ],
   "hosting": {
-    "public": "dist/cowboy-dataviz-ui/browser",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "dist/cowboy-dataviz-ui",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
