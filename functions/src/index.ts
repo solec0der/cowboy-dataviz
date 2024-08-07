@@ -1,24 +1,68 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { onSchedule, ScheduledEvent } from 'firebase-functions/v2/scheduler';
+import admin from 'firebase-admin';
+import axios from 'axios';
+import * as logger from 'firebase-functions/logger';
 
-import {onSchedule, ScheduledEvent} from "firebase-functions/v2/scheduler";
-import * as logger from "firebase-functions/logger";
+admin.initializeApp();
+const firestore = admin.firestore();
 
-export const fetchData = onSchedule('every 5 minutes', async (event: ScheduledEvent) => {
-    logger.info("This will be run every 5 minutes!");
-});
+const COWBOY_API_BASE_URL = 'https://app-api.cowboy.bike';
+const SIGN_IN_URL = COWBOY_API_BASE_URL + '/auth/sign_in';
+const USERS_ME_URL = COWBOY_API_BASE_URL + '/users/me';
 
+const getAuthContext = async (
+  cowboyEmail: string,
+  cowboyPassword: string
+): Promise<AuthContext> => {
+  logger.info('cowboy-email=' + cowboyEmail);
+  logger.info('cowboy-password=' + cowboyPassword);
+  const response = await axios.post(SIGN_IN_URL, {
+    email: cowboyEmail,
+    password: cowboyPassword,
+  });
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+  return {
+    accessToken: response.headers['access-token'],
+    client: response.headers['client'],
+    uid: response.headers['uid'],
+    expiry: response.headers['expiry'],
+  };
+};
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const getRequestHeaders = async (
+  cowboyEmail: string,
+  cowboyPassword: string
+): Promise<Record<string, string>> => {
+  const authContext = await getAuthContext(cowboyEmail, cowboyPassword);
+  return {
+    'Access-Token': authContext.accessToken,
+    'X-Cowboy-App-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    Client: authContext.client,
+    'Client-Type': 'Android-App',
+    Uid: authContext.uid,
+  };
+};
+
+export const fetchData = onSchedule(
+  { schedule: '0 * * * *', secrets: ['COWBOY_EMAIL', 'COWBOY_PASSWORD'] },
+  async (event: ScheduledEvent) => {
+    const cowboyEmail = process.env.COWBOY_EMAIL || '';
+    const cowboyPassword = process.env.COWBOY_PASSWORD || '';
+
+    const headers = await getRequestHeaders(cowboyEmail, cowboyPassword);
+
+    const profileResponse = await axios.get(USERS_ME_URL, {
+      headers,
+    });
+
+    const profileData = profileResponse.data;
+    await firestore.collection('profileReadings').add(profileData);
+  }
+);
+
+interface AuthContext {
+  accessToken: string;
+  client: string;
+  uid: string;
+  expiry: number;
+}
